@@ -37,6 +37,11 @@ async function initializeFirebase() {
   }
 }
 
+// Root endpoint for Cloud Run health checks
+app.get('/', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
 // Health check endpoint for Cloud Run
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'healthy' });
