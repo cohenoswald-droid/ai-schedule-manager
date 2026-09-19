@@ -39,7 +39,9 @@ async function initializeFirebase() {
 
 // Root endpoint for Cloud Run health checks
 app.get('/', (req, res) => {
-  res.status(200).json({ status: 'ok' });
+  console.log('GET / route called');
+  res.setHeader('Content-Type', 'application/json');
+  res.status(200).send(JSON.stringify({ status: 'ok' }));
 });
 
 // Health check endpoint for Cloud Run
@@ -89,7 +91,14 @@ app.use((req, res) => {
 
 // Start server after Firebase is initialized
 initializeFirebase().then(() => {
+  console.log('Firebase initialized, starting server...');
   app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server successfully listening on port ${PORT}`);
+    console.log(`Health check: GET /`);
+    console.log(`Health check: GET /health`);
+    console.log(`Capture endpoint: POST /capture`);
   });
+}).catch(error => {
+  console.error('Failed to initialize Firebase:', error);
+  process.exit(1);
 });
