@@ -12,7 +12,6 @@ RUN npm install --only=production
 
 # Copy application code
 COPY app.js .
-COPY credentials.json .
 
 # Expose port 8080 (Cloud Run requirement)
 EXPOSE 8080
