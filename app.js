@@ -52,13 +52,32 @@ app.get('/health', (req, res) => {
 // Capture endpoint
 app.post('/capture', async (req, res) => {
   try {
-    const { source, message, timestamp, rawText } = req.body;
+    const { source, message, timestamp, rawText, userId } = req.body;
+
+    console.log('Capture request received:', { source, message: message?.substring(0, 50), userId });
 
     // Validate required fields
-    if (!source || !message) {
+    if (!source) {
+      console.warn('Validation failed: missing source');
       return res.status(400).json({
         success: false,
-        error: 'Missing required fields: source and message'
+        error: 'Missing required field: source'
+      });
+    }
+
+    if (!message) {
+      console.warn('Validation failed: missing message');
+      return res.status(400).json({
+        success: false,
+        error: 'Missing required field: message'
+      });
+    }
+
+    if (!rawText) {
+      console.warn('Validation failed: missing rawText');
+      return res.status(400).json({
+        success: false,
+        error: 'Missing required field: rawText'
       });
     }
 
@@ -67,19 +86,25 @@ app.post('/capture', async (req, res) => {
       source,
       message,
       timestamp: timestamp || new Date().toISOString(),
-      rawText: rawText || null,
+      rawText,
+      userId: userId || null,
       createdAt: admin.firestore.FieldValue.serverTimestamp()
     });
 
+    console.log('Schedule captured successfully:', { id: docRef.id, source, userId });
+
     res.status(201).json({
       success: true,
-      id: docRef.id
+      id: docRef.id,
+      message: `Schedule captured successfully from ${source}`,
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
     console.error('Error capturing schedule:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal server error'
+      error: 'Internal server error',
+      details: error.message
     });
   }
 });
