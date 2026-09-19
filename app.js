@@ -1,7 +1,6 @@
 const express = require('express');
 const admin = require('firebase-admin');
 const cors = require('cors');
-const path = require('path');
 const { Firestore } = require('@google-cloud/firestore');
 require('dotenv').config();
 
@@ -17,21 +16,16 @@ let db;
 // Initialize Firebase Admin
 async function initializeFirebase() {
   try {
-    // Load credentials from file path
-    const credentialsPath = path.resolve(__dirname, 'credentials.json');
-    const serviceAccount = require(credentialsPath);
-
-    // Initialize Firebase Admin SDK
-    const firebaseApp = admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
+    // Initialize Firebase Admin SDK with Application Default Credentials
+    // Cloud Run will automatically use the service account attached to it
+    admin.initializeApp({
       projectId: 'grounded-tine-509019-e1'
     });
 
     // Get Firestore instance for the specific database
     db = new Firestore({
       projectId: 'grounded-tine-509019-e1',
-      databaseId: 'schedule-manager',
-      keyFilename: credentialsPath
+      databaseId: 'schedule-manager'
     });
 
     console.log('Firebase Admin SDK initialized successfully');
