@@ -1,4 +1,27 @@
 {
+    "name": "ai-schedule-manager",
+    "version": "1.0.0",
+    "description": "AI schedule management system for capturing and delivering daily briefings",
+    "main": "app.js",
+    "scripts": {
+          "start": "node app.js",
+          "dev": "nodemon app.js",
+          "test": "jest"
+    },
+    "dependencies": {
+          "express": "^4.18.2",
+          "firebase-admin": "^12.0.0",
+          "cors": "^2.8.5",
+          "dotenv": "^16.3.1",
+          "googleapis": "^130.0.0"
+    },
+    "devDependencies": {
+          "nodemon": "^3.0.1"
+    },
+    "engines": {
+          "node": ">=18.0.0"
+    }
+}{
   "name": "ai-schedule-manager",
   "version": "1.0.0",
   "description": "AI Schedule Manager - Cloud Run service for capturing schedule data",
